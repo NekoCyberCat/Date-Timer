@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Date Timer</title>
+
+    <style>
+      body {
+        background-image: url("https://i.pinimg.com/originals/90/2f/b6/902fb683da6e99129aa43990f81607cd.gif");
+        display: flex;
+        align-items: center;
+        margin: 75px;
+        flex-direction: column;
+      }
+
+      .B1 {
+        background-color: #ff2e63;
+        border-color: #333c83;
+        border-radius: 20px 40px;
+        padding: 4px 12px;
+        font-size: 17px;
+      }
+
+      .B2 {
+        background-color: #711a75;
+        border-color: #fd93bc;
+        color: #fff;
+      }
+
+      button:focus {
+        outline: thin dotted;
+        outline: 0px auto -webkit-focus-ring-color;
+        outline-offset: 0px;
+      }
+
+      button:hover {
+        background-color: #ff9d9d;
+        border-color: #ffbd69;
+        color: #fff;
+        cursor: pointer;
+      }
+
+      .B2:hover {
+        background-color: #b88bbb;
+        color: black;
+      }
+
+      h1 {
+        font-size: 80px;
+        color: #fff;
+      }
+    </style>
+  </head>
+  <body>
+    <div>
+      <input type="date" value="2023-01-01" />
+      <button class="B1" onclick="start()">Iniciar</button>
+      <button class="B1 B2" onclick="stop()">Resetar</button>
+    </div>
+    <h1>🤔</h1>
+
+    <script>
+      const second = 1000;
+      const minute = 60 * second;
+      const hour = 50 * minute;
+      const day = 24 * hour;
+
+      let total;
+      let finalDate;
+      let intervalId;
+
+      if (localStorage.getItem("timer")) {
+        finalDate = localStorage.getItem("timer");
+        intervalId = setInterval(timer, 1000);
+      }
+
+      function start() {
+        const date = document.querySelector("input").value;
+        finalDate = new Date(date).getTime();
+        localStorage.setItem("timer", finalDate);
+
+        intervalId = setInterval(timer, 1000);
+      }
+
+      function timer() {
+        let now = new Date().getTime();
+        total = finalDate - now;
+
+        const days = Math.floor(total / day);
+        const hours = Math.floor((total % day) / hour);
+        const minutes = Math.floor((total % hour) / minute);
+        const seconds = Math.floor((total % minute) / second);
+
+        document.querySelector(
+          "h1"
+        ).innerHTML = `${days} d ${hours} h ${minutes}  m ${seconds} s`;
+      }
+
+      function stop() {
+        document.querySelector("h1").innerText = "🤔";
+        clearInterval(intervalId);
+        localStorage.removeItem("timer");
+      }
+    </script>
+  </body>
+</html>
